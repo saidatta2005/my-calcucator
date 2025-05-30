@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dark Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      font-family: Arial, sans-serif;
+    }
+
+    @keyframes floatDown {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateY(120vh);
+        opacity: 0;
+      }
+    }
+
+    @keyframes gradientBackground {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
+      background-size: 400% 400%;
+      animation: gradientBackground 15s ease infinite;
+      z-index: -3;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #121212;
+    }
+
+    .calculator {
+      width: 300px;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .display {
+      width: 100%;
+      height: 50px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: right;
+      font-size: 1.6rem;
+      padding: 10px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .button {
+      height: 50px;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .button:hover {
+      background: #666;
+    }
+
+    .button.operator {
+      background: #28a745;
+    }
+
+    .button.operator:hover {
+      background: #1e7e34;
+    }
+
+    .button.clear {
+      background: #dc3545;
+    }
+
+    .button.clear:hover {
+      background: #c82333;
+    }
+
+    .floating-symbol {
+      position: fixed;
+      color: rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+      z-index: -1;
+      animation: floatDown linear infinite;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    const symbols = ['+', '-', '×', '÷', '='];
+    const symbolCount = 50;
+
+    for (let i = 0; i < symbolCount; i++) {
+      const span = document.createElement('span');
+      span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      span.classList.add('floating-symbol');
+
+      const size = Math.random() * 2 + 1; // 1rem to 3rem
+      span.style.fontSize = `${size}rem`;
+
+      span.style.left = `${Math.random() * 100}vw`;
+      span.style.top = `${Math.random() * -120}vh`;
+      span.style.animationDuration = `${5 + Math.random() * 10}s`;
+
+      document.body.appendChild(span);
+    }
+  </script>
+
+  <div class="calculator">
+    <input type="text" class="display" id="display" disabled />
+    <div class="buttons">
+      <button class="button" onclick="appendValue('7')">7</button>
+      <button class="button" onclick="appendValue('8')">8</button>
+      <button class="button" onclick="appendValue('9')">9</button>
+      <button class="button operator" onclick="appendValue('/')">/</button>
+      <button class="button" onclick="appendValue('4')">4</button>
+      <button class="button" onclick="appendValue('5')">5</button>
+      <button class="button" onclick="appendValue('6')">6</button>
+      <button class="button operator" onclick="appendValue('*')">*</button>
+      <button class="button" onclick="appendValue('1')">1</button>
+      <button class="button" onclick="appendValue('2')">2</button>
+      <button class="button" onclick="appendValue('3')">3</button>
+      <button class="button operator" onclick="appendValue('-')">-</button>
+      <button class="button" onclick="appendValue('0')">0</button>
+      <button class="button" onclick="appendValue('.')">.</button>
+      <button class="button clear" onclick="clearDisplay()">C</button>
+      <button class="button operator" onclick="appendValue('+')">+</button>
+      <button class="button operator" style="grid-column: span 4;" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+
+    function appendValue(value) {
+      display.value += value;
+    }
+
+    function clearDisplay() {
+      display.value = '';
+    }
+
+    function calculate() {
+      try {
+        display.value = eval(display.value);
+      } catch {
+        display.value = 'Error';
+      }
+    }
+  </script>
+</body>
+</html>
